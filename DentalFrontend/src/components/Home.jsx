@@ -4,7 +4,7 @@ import { Service } from "./Service";
 export function Home() {
   return (
     <>
-      <div class="conatiner">
+      <div className="conatiner">
         <section id="Home">
           <div style={{ display: "flex" }}>
             <div

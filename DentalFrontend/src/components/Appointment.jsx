@@ -79,105 +79,99 @@ export function Appointment() {
             }}
             onSubmit={handleSubmit}
           >
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputEmail1" className="form-label">
                 Name
               </label>
               <input
                 type="text"
-                class="form-control"
+                className="form-control"
                 id="exampleInputName"
                 onChange={handleName}
                 value={name}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputPassword1" className="form-label">
                 Email
               </label>
               <input
                 type="email"
-                class="form-control"
+                className="form-control"
                 id="exampleInputEmail"
                 onChange={handleEmail}
                 value={email}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputPassword1" className="form-label">
                 Phone
               </label>
               <input
                 type="phone"
-                class="form-control"
+                className="form-control"
                 id="exampleInputPhone"
                 onChange={handlePhone}
                 value={phone}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputPassword1" className="form-label">
                 Date
               </label>
               <input
                 type="date"
-                class="form-control"
+                className="form-control"
                 id="exampleInputDate"
                 onChange={handleDate}
                 value={date}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputPassword1" className="form-label">
                 Time
               </label>
               <input
                 type="time"
-                class="form-control"
+                className="form-control"
                 id="exampleInputTime"
                 onChange={handleTime}
                 value={time}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">
+            <div className="mb-3">
+              <label htmlFor="exampleInputPassword1" className="form-label">
                 Message
               </label>
               <input
                 type="message"
-                class="form-control"
+                className="form-control"
                 id="exampleInputMessage"
                 onChange={handleMessage}
                 value={message}
-                backgroundColor="#bde1df"
-                style={{
+                style={{ backgroundColor: "#bde1df", 
                   boxShadow: "1px 1px 1px 1px #b12d51",
                 }}
               />
             </div>
             <button
               type="submit"
-              class="btn "
+              className="btn "
               style={{ backgroundColor: "#b12d51" }}
             >
               Submit

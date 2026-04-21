@@ -4,12 +4,12 @@ export function ServiceCard(props) {
   return (
     <>
       <div
-        class="card"
+        className="card"
         style={{ width: "18rem", boxShadow: "2px 1px 3px 1px #b12d51" }}
       >
         <img
           src={props.img}
-          class="card-img-top"
+          className="card-img-top"
           style={{
             height: "170px",
             marginLeft: "20px",
@@ -18,15 +18,15 @@ export function ServiceCard(props) {
           }}
           alt="..."
         />
-        <div class="card-body">
-          <h5 class="card-title">{props.title}</h5>
-          <p class="card-text">
+        <div className="card-body">
+          <h5 className="card-title">{props.title}</h5>
+          <p className="card-text">
             Some quick example text to build on the card title and make up the
             bulk of the card’s content.
           </p>
           <Link
             to="/appointment"
-            class="btn "
+            className="btn "
             style={{ backgroundColor: "#b12d51" }}
           >
             Book Appointment
