@@ -34,16 +34,32 @@ catch(err){
 })
 
 //Viewing Appointments by Admin
-router.get("/view",async(req,res)=>{
-  try{
-    const appointment=await Appointment.find();
-    res.json(appointment);
-  }
-  catch(err){
-    console.log(err);
+router.get("/view", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 8;
+    const skip = (page - 1) * limit;
 
+    const query = { isDeleted: false };
+    
+    const appointments = await Appointment.find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ _id: -1 }); // Sorting by newest first
+      
+    const total = await Appointment.countDocuments(query);
+
+    res.json({
+      appointments,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      totalAppointments: total
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error fetching appointments" });
   }
-})
+});
 
 
 //Updating  Appointment by Admin
@@ -89,4 +105,22 @@ router.put("/decline/:id", async (req, res) => {
     res.status(500).json({ message: "Error declining appointment" });
   }
 });
+
+// Soft Delete Appointment
+router.put("/soft-delete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const appointment = await Appointment.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+    
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+    
+    res.json({ message: "Appointment deleted successfully", appointment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error deleting appointment" });
+  }
+});
+
 module.exports = router;
