@@ -123,4 +123,16 @@ router.put("/soft-delete/:id", async (req, res) => {
   }
 });
 
+// Fetch User Specific Appointments
+router.get("/my-appointments/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const appointments = await Appointment.find({ email, isDeleted: false }).sort({ _id: -1 });
+    res.json(appointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching your appointments" });
+  }
+});
+
 module.exports = router;

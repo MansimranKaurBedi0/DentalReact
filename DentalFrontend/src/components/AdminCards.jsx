@@ -1,103 +1,99 @@
-export function AdminCards(props) {
-  //Handle Accept
-  async function handleAccept() {
-    const res = await fetch(`http://localhost:3000/user/accept/${props._id}`, {
+import { Mail, Phone, Calendar, Clock, Trash2, CheckCircle, XCircle, MessageSquare } from "lucide-react";
+
+export function AdminCards({ _id, name, email, phone, date, time, message, status, onRefresh }) {
+  
+  async function updateStatus(action) {
+    const res = await fetch(`http://localhost:3000/user/${action}/${_id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
     if (res.ok) {
-      alert("Appointment Accepted ✅");
-      if (props.onRefresh) props.onRefresh();
+      if (onRefresh) onRefresh();
     }
   }
 
-  //Handle Decline
-  async function handleDecline() {
-    const res = await fetch(`http://localhost:3000/user/decline/${props._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.ok) {
-      alert("Appointment Declined ✅");
-      if (props.onRefresh) props.onRefresh();
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this appointment?")) {
+      const res = await fetch(`http://localhost:3000/user/soft-delete/${_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.ok) if (onRefresh) onRefresh();
     }
-  }
+  };
 
-  //Handle Soft Delete
-  async function handleDelete() {
-    const confirmDelete = window.confirm("Are you sure you want to delete this appointment?");
-    if (!confirmDelete) return;
-
-    const res = await fetch(`http://localhost:3000/user/soft-delete/${props._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.ok) {
-      alert("Appointment Deleted 🗑️");
-      if (props.onRefresh) props.onRefresh();
+  const getStatusStyles = () => {
+    switch (status) {
+      case "accepted":
+        return "bg-green-50 text-green-700 border-green-100";
+      case "declined":
+        return "bg-red-50 text-red-700 border-red-100";
+      default:
+        return "bg-amber-50 text-amber-700 border-amber-100";
     }
-  }
-
-  // Status badge color
-  const statusColor =
-    props.status === "accepted"
-      ? "success"
-      : props.status === "declined"
-      ? "danger"
-      : "warning";
+  };
 
   return (
-    <>
-      <div className="card shadow-sm border-0" style={{ borderRadius: "12px" }}>
-        <div className="card-body">
-          <h5 className="card-title fw-bold">{props.name}</h5>
-          <p className="card-text mb-1"><strong>Email:</strong> {props.email}</p>
-          <p className="card-text mb-1"><strong>Phone:</strong> {props.phone}</p>
-          <p className="card-text mb-1"><strong>Date:</strong> {props.date}</p>
-          <p className="card-text mb-1"><strong>Time:</strong> {props.time}</p>
-          {props.message && (
-            <p className="card-text mb-2"><strong>Message:</strong> {props.message}</p>
-          )}
-          <p className="card-text mb-3">
-            <strong>Status: </strong>
-            <span className={`badge bg-${statusColor}`}>
-              {props.status}
-            </span>
-          </p>
+    <div className="card-premium flex flex-col h-full">
+      <div className="p-5 flex-grow">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="font-bold text-slate-900 leading-tight">{name}</h3>
+          <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full border ${getStatusStyles()}`}>
+            {status}
+          </span>
+        </div>
 
-          <div className="d-flex gap-2 flex-wrap">
-            <button
-              type="button"
-              className="btn btn-success btn-sm"
-              onClick={handleAccept}
-              disabled={props.status === "accepted"}
-            >
-              Accept
-            </button>
-            <button
-              type="button"
-              className="btn btn-warning btn-sm"
-              onClick={handleDecline}
-              disabled={props.status === "declined"}
-            >
-              Decline
-            </button>
-            <button
-              type="button"
-              className="btn btn-outline-danger btn-sm"
-              onClick={handleDelete}
-            >
-              🗑️ Delete
-            </button>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-sm text-slate-600">
+            <Mail size={14} className="text-slate-400" />
+            <span className="truncate">{email}</span>
           </div>
+          <div className="flex items-center gap-3 text-sm text-slate-600">
+            <Phone size={14} className="text-slate-400" />
+            <span>{phone}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-slate-600">
+            <Calendar size={14} className="text-slate-400" />
+            <span>{date}</span>
+          </div>
+          <div className="flex items-center gap-3 text-sm text-slate-600">
+            <Clock size={14} className="text-slate-400" />
+            <span>{time}</span>
+          </div>
+          {message && (
+            <div className="pt-2 flex items-start gap-3 text-xs text-slate-500 italic bg-slate-50 p-2 rounded-lg">
+              <MessageSquare size={12} className="mt-0.5 shrink-0" />
+              <p className="line-clamp-2">{message}</p>
+            </div>
+          )}
         </div>
       </div>
-    </>
+
+      <div className="p-4 bg-slate-50/50 border-t border-slate-100 grid grid-cols-3 gap-2">
+        <button
+          onClick={() => updateStatus("accept")}
+          disabled={status === "accepted"}
+          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-green-100 text-green-600 disabled:opacity-30 disabled:hover:bg-transparent"
+        >
+          <CheckCircle size={18} />
+          Accept
+        </button>
+        <button
+          onClick={() => updateStatus("decline")}
+          disabled={status === "declined"}
+          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-amber-100 text-amber-600 disabled:opacity-30 disabled:hover:bg-transparent"
+        >
+          <XCircle size={18} />
+          Decline
+        </button>
+        <button
+          onClick={handleDelete}
+          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-red-100 text-red-600"
+        >
+          <Trash2 size={18} />
+          Delete
+        </button>
+      </div>
+    </div>
   );
 }
