@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Stethoscope, Facebook, Instagram, Linkedin, MapPin, Phone, Mail } from "lucide-react";
+import { Stethoscope, MapPin, Phone, Mail } from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 export function Footer() {
   return (
@@ -19,9 +20,9 @@ export function Footer() {
               Providing world-class dental care with state-of-the-art technology and a compassionate team dedicated to your perfect smile.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><Facebook size={18} /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><Instagram size={18} /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><Linkedin size={18} /></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><FaFacebook size={18} /></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><FaInstagram size={18} /></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all"><FaLinkedin size={18} /></a>
             </div>
           </div>
 
