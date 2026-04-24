@@ -66,10 +66,15 @@ router.get("/view", async (req, res) => {
 router.put("/accept/:id",async(req,res)=>{
   try{
   const id=req.params.id;
-  const appointment=await Appointment.findByIdAndUpdate(id,{status:"accepted"},{ new: true });
+  const appointment=await Appointment.findById(id);
   if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
+  if (appointment.status !== "pending") {
+      return res.status(400).json({ message: `Cannot accept — appointment is already ${appointment.status}` });
+    }
+  appointment.status = "accepted";
+  await appointment.save();
     await sendMail(
       appointment.email,
       "Appointment Accepted",
@@ -87,11 +92,18 @@ router.put("/accept/:id",async(req,res)=>{
 router.put("/decline/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    const appointment = await Appointment.findByIdAndUpdate(id, { status: "declined" }, { new: true });
+    const appointment = await Appointment.findById(id);
 
     if (!appointment) {
       return res.status(404).json({ message: "Appointment not found" });
     }
+
+    if (appointment.status !== "pending") {
+      return res.status(400).json({ message: `Cannot decline — appointment is already ${appointment.status}` });
+    }
+
+    appointment.status = "declined";
+    await appointment.save();
 
     await sendMail(
       appointment.email,

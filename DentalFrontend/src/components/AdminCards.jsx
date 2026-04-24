@@ -96,7 +96,7 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
           <>
             <button
               onClick={() => updateStatus("accept")}
-              disabled={status === "accepted"}
+              disabled={status !== "pending"}
               className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-green-100 text-green-600 disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <CheckCircle size={18} />
@@ -104,7 +104,7 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
             </button>
             <button
               onClick={() => updateStatus("decline")}
-              disabled={status === "declined"}
+              disabled={status !== "pending"}
               className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-amber-100 text-amber-600 disabled:opacity-30 disabled:hover:bg-transparent"
             >
               <XCircle size={18} />
