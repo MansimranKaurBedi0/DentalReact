@@ -51,7 +51,10 @@ export function Nav() {
                 </Link>
               </>
             ) : (
-              <Link to="/admin" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">Dashboard</Link>
+              <>
+                <Link to="/admin" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">Dashboard</Link>
+                <Link to="/admin/completed" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">Completed</Link>
+              </>
             )}
 
             <div className="h-6 w-px bg-slate-200"></div>
@@ -116,7 +119,10 @@ export function Nav() {
                   <Link to="/appointment" className="block px-3 py-4 text-brand-600 font-bold border-b border-slate-50">Book Appointment</Link>
                 </>
               ) : (
-                <Link to="/admin" className="block px-3 py-4 text-slate-700 font-medium border-b border-slate-50">Dashboard</Link>
+                <>
+                  <Link to="/admin" className="block px-3 py-4 text-slate-700 font-medium border-b border-slate-50">Dashboard</Link>
+                  <Link to="/admin/completed" className="block px-3 py-4 text-slate-700 font-medium border-b border-slate-50">Completed</Link>
+                </>
               )}
               
               {user ? (

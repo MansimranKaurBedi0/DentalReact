@@ -1,5 +1,6 @@
 import "./App.css";
 import { Admin } from "./components/Admin";
+import { AdminCompleted } from "./components/AdminCompleted";
 import { Appointment } from "./components/Appointment";
 import { Home } from "./components/Home";
 import { Nav } from "./components/Nav";
@@ -51,6 +52,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <Admin />
+              </ProtectedAdminRoute>
+            } 
+          />
+          <Route 
+            path="/admin/completed" 
+            element={
+              <ProtectedAdminRoute>
+                <AdminCompleted />
               </ProtectedAdminRoute>
             } 
           />

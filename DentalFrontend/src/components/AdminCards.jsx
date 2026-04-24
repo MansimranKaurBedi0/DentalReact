@@ -1,6 +1,6 @@
-import { Mail, Phone, Calendar, Clock, Trash2, CheckCircle, XCircle, MessageSquare } from "lucide-react";
+import { Mail, Phone, Calendar, Clock, Trash2, CheckCircle, XCircle, MessageSquare, CircleCheckBig } from "lucide-react";
 
-export function AdminCards({ _id, name, email, phone, date, time, message, status, onRefresh }) {
+export function AdminCards({ _id, name, email, phone, date, time, message, status, onRefresh, showDeleteOnly }) {
   
   async function updateStatus(action) {
     const res = await fetch(`http://localhost:3000/user/${action}/${_id}`, {
@@ -22,12 +22,24 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
     }
   };
 
+  const handleComplete = async () => {
+    if (window.confirm("Mark this appointment as completed?")) {
+      const res = await fetch(`http://localhost:3000/user/complete/${_id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.ok) if (onRefresh) onRefresh();
+    }
+  };
+
   const getStatusStyles = () => {
     switch (status) {
       case "accepted":
         return "bg-green-50 text-green-700 border-green-100";
       case "declined":
         return "bg-red-50 text-red-700 border-red-100";
+      case "completed":
+        return "bg-blue-50 text-blue-700 border-blue-100";
       default:
         return "bg-amber-50 text-amber-700 border-amber-100";
     }
@@ -69,30 +81,46 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
         </div>
       </div>
 
-      <div className="p-4 bg-slate-50/50 border-t border-slate-100 grid grid-cols-3 gap-2">
-        <button
-          onClick={() => updateStatus("accept")}
-          disabled={status === "accepted"}
-          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-green-100 text-green-600 disabled:opacity-30 disabled:hover:bg-transparent"
-        >
-          <CheckCircle size={18} />
-          Accept
-        </button>
-        <button
-          onClick={() => updateStatus("decline")}
-          disabled={status === "declined"}
-          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-amber-100 text-amber-600 disabled:opacity-30 disabled:hover:bg-transparent"
-        >
-          <XCircle size={18} />
-          Decline
-        </button>
-        <button
-          onClick={handleDelete}
-          className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-red-100 text-red-600"
-        >
-          <Trash2 size={18} />
-          Delete
-        </button>
+      <div className={`p-4 bg-slate-50/50 border-t border-slate-100 grid ${showDeleteOnly ? 'grid-cols-1' : 'grid-cols-3'} gap-2`}>
+        {showDeleteOnly ? (
+          /* Completed page — only show Delete */
+          <button
+            onClick={handleDelete}
+            className="flex items-center justify-center gap-2 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-red-100 text-red-600"
+          >
+            <Trash2 size={18} />
+            Delete Record
+          </button>
+        ) : (
+          /* Active page — Accept, Decline, Mark Complete */
+          <>
+            <button
+              onClick={() => updateStatus("accept")}
+              disabled={status === "accepted"}
+              className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-green-100 text-green-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <CheckCircle size={18} />
+              Accept
+            </button>
+            <button
+              onClick={() => updateStatus("decline")}
+              disabled={status === "declined"}
+              className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-amber-100 text-amber-600 disabled:opacity-30 disabled:hover:bg-transparent"
+            >
+              <XCircle size={18} />
+              Decline
+            </button>
+            <button
+              onClick={handleComplete}
+              disabled={status !== "accepted"}
+              className="flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-bold uppercase transition-all hover:bg-blue-100 text-blue-600 disabled:opacity-30 disabled:hover:bg-transparent"
+              title={status !== "accepted" ? "Accept the appointment first before marking complete" : "Mark treatment as completed"}
+            >
+              <CircleCheckBig size={18} />
+              Complete
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

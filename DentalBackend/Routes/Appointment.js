@@ -40,7 +40,7 @@ router.get("/view", async (req, res) => {
     const limit = parseInt(req.query.limit) || 8;
     const skip = (page - 1) * limit;
 
-    const query = { isDeleted: false };
+    const query = { isDeleted: false, status: { $ne: "completed" } };
     
     const appointments = await Appointment.find(query)
       .skip(skip)
@@ -103,6 +103,64 @@ router.put("/decline/:id", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error declining appointment" });
+  }
+});
+
+// Mark Appointment as Completed
+router.put("/complete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const appointment = await Appointment.findById(id);
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    if (appointment.status !== "accepted") {
+      return res.status(400).json({ message: "Only accepted appointments can be marked as completed" });
+    }
+
+    appointment.status = "completed";
+    await appointment.save();
+
+    await sendMail(
+      appointment.email,
+      "Treatment Completed",
+      `Hello ${appointment.name}, your treatment on ${appointment.date} at ${appointment.time} has been completed. Thank you for visiting DentalClinic!`
+    );
+
+    res.json({ message: "Appointment marked as completed", appointment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error completing appointment" });
+  }
+});
+
+// View Completed Appointments (separate page)
+router.get("/view-completed", async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 8;
+    const skip = (page - 1) * limit;
+
+    const query = { isDeleted: false, status: "completed" };
+
+    const appointments = await Appointment.find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ _id: -1 });
+
+    const total = await Appointment.countDocuments(query);
+
+    res.json({
+      appointments,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      totalAppointments: total
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching completed appointments" });
   }
 });
 
