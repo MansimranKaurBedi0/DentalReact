@@ -118,8 +118,8 @@ export function Dashboard() {
         {/* Welcome Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Welcome back, {user?.name}!</h1>
-            <p className="text-slate-500 mt-1">Manage your health and track your appointments.</p>
+            <h1 className="text-3xl font-extrabold text-slate-900 font-heading">Welcome back, {user?.name}!</h1>
+            <p className="text-slate-400 mt-1">Manage your health and track your appointments.</p>
           </div>
           <Link to="/appointment" className="btn-primary py-3 px-6 shadow-xl shadow-brand-100">
             <Plus size={20} /> Book New Appointment
@@ -128,21 +128,21 @@ export function Dashboard() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
-          <div className="bg-brand-600 rounded-3xl p-6 text-white shadow-lg shadow-brand-100">
-            <div className="text-3xl font-bold mb-1">{upcoming.length}</div>
+          <div className="bg-gradient-to-br from-brand-500 to-brand-600 rounded-3xl p-6 text-white shadow-lg shadow-brand-500/20">
+            <div className="text-3xl font-extrabold mb-1 font-heading">{upcoming.length}</div>
             <div className="text-xs font-medium opacity-80 uppercase tracking-wider">Active</div>
           </div>
-          <div className="bg-medical-teal rounded-3xl p-6 text-white shadow-lg shadow-medical-teal/20">
-            <div className="text-3xl font-bold mb-1">{appointments.length}</div>
+          <div className="bg-gradient-to-br from-mint-500 to-mint-600 rounded-3xl p-6 text-white shadow-lg shadow-mint-500/20">
+            <div className="text-3xl font-extrabold mb-1 font-heading">{appointments.length}</div>
             <div className="text-xs font-medium opacity-80 uppercase tracking-wider">Total</div>
           </div>
-          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-soft">
-            <div className="text-3xl font-bold text-green-600 mb-1">{appointments.filter(a => a.status === 'completed').length}</div>
-            <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Completed</div>
+          <div className="card-float p-6">
+            <div className="text-3xl font-extrabold text-green-600 mb-1 font-heading">{appointments.filter(a => a.status === 'completed').length}</div>
+            <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Completed</div>
           </div>
-          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-soft">
-            <div className="text-3xl font-bold text-amber-600 mb-1">{appointments.filter(a => a.status === 'pending').length}</div>
-            <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending</div>
+          <div className="card-float p-6">
+            <div className="text-3xl font-extrabold text-amber-500 mb-1 font-heading">{appointments.filter(a => a.status === 'pending').length}</div>
+            <div className="text-xs font-medium text-slate-400 uppercase tracking-wider">Pending</div>
           </div>
         </div>
 

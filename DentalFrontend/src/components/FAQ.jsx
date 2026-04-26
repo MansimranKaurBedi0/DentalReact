@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HelpCircle } from "lucide-react";
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -25,13 +25,23 @@ export function FAQ() {
   ];
 
   return (
-    <section className="py-24 bg-white" id="faq">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <span className="text-brand-600 font-bold tracking-widest uppercase text-sm">Got Questions?</span>
-          <h2 className="text-4xl font-bold text-slate-900 mt-4 mb-4">Frequently Asked Questions</h2>
-          <p className="text-slate-600">Everything you need to know about our clinic and treatments.</p>
-        </div>
+    <section className="py-28 relative" id="faq">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-mint-50/20 to-transparent"></div>
+      
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <span className="section-tag">
+            <HelpCircle size={14} />
+            Got Questions?
+          </span>
+          <h2 className="section-title">Frequently Asked Questions</h2>
+          <p className="section-subtitle">Everything you need to know about our clinic and treatments.</p>
+        </motion.div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
@@ -40,18 +50,25 @@ export function FAQ() {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="border border-slate-200 rounded-2xl overflow-hidden"
+              transition={{ delay: index * 0.08 }}
+              className={`rounded-2xl overflow-hidden transition-all duration-300 ${
+                openIndex === index 
+                  ? 'bg-white shadow-float border border-brand-100/50' 
+                  : 'bg-white/60 backdrop-blur-sm border border-slate-100/60 hover:bg-white/80 hover:shadow-soft'
+              }`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex justify-between items-center p-6 bg-white hover:bg-slate-50 transition-colors text-left"
+                className="w-full flex justify-between items-center p-6 text-left group"
               >
-                <span className="font-bold text-slate-900">{faq.question}</span>
-                <ChevronDown 
-                  className={`text-brand-600 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
-                  size={20} 
-                />
+                <span className={`font-semibold transition-colors ${openIndex === index ? 'text-brand-600' : 'text-slate-800'}`}>
+                  {faq.question}
+                </span>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ml-4 transition-all duration-300 ${
+                  openIndex === index ? 'bg-brand-100 text-brand-600 rotate-180' : 'bg-slate-50 text-slate-400'
+                }`}>
+                  <ChevronDown size={16} />
+                </div>
               </button>
               <AnimatePresence>
                 {openIndex === index && (
@@ -61,7 +78,7 @@ export function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="p-6 pt-0 text-slate-600 leading-relaxed bg-white">
+                    <div className="px-6 pb-6 text-slate-500 leading-relaxed">
                       {faq.answer}
                     </div>
                   </motion.div>

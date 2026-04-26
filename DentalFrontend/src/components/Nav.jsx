@@ -96,15 +96,15 @@ export function Nav() {
 
   return (
     <>
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-100">
+    <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-white/40 shadow-soft">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <Link to={isAdmin ? "/admin" : "/"} className="flex items-center gap-2 group">
-              <div className="bg-brand-600 p-2 rounded-xl text-white shadow-lg group-hover:rotate-12 transition-transform duration-300">
+              <div className="bg-gradient-to-br from-brand-500 to-mint-500 p-2.5 rounded-2xl text-white shadow-lg shadow-brand-500/20 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300">
                 <Stethoscope size={24} />
               </div>
-              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-medical-teal tracking-tight">
+              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-brand-500 to-mint-500 tracking-tight font-heading">
                 DentalClinic
               </span>
               {isAdmin && (
@@ -124,8 +124,8 @@ export function Nav() {
                 <a href="/#about" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">About</a>
                 <a href="#contact" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">Contact</a>
                 {user && <Link to="/dashboard" className="text-slate-600 hover:text-brand-600 font-medium transition-colors">Dashboard</Link>}
-                <Link to="/appointment" className="btn-primary py-2 px-4 flex items-center gap-2 shadow-lg shadow-brand-500/20">
-                  <Calendar size={18} />
+                <Link to="/appointment" className="btn-primary py-2.5 px-5 text-sm">
+                  <Calendar size={16} />
                   Book Now
                 </Link>
               </>
@@ -142,9 +142,9 @@ export function Nav() {
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-100 hover:bg-slate-100 hover:border-slate-200 transition-all cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-white/60 backdrop-blur-sm rounded-full border border-slate-100/80 hover:bg-white hover:border-slate-200 hover:shadow-soft transition-all duration-300 cursor-pointer"
                 >
-                  <div className="w-7 h-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-100 to-mint-100 flex items-center justify-center text-brand-600">
                     <User size={14} />
                   </div>
                   <span className="text-sm font-semibold text-slate-700">{user.name}</span>
@@ -161,10 +161,10 @@ export function Nav() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 8, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-[100]"
+                      className="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-premium border border-white/60 overflow-hidden z-[100]"
                     >
                       {/* Profile Header */}
-                      <div className="bg-gradient-to-br from-brand-600 to-brand-700 px-5 py-5 text-white">
+                      <div className="bg-gradient-to-br from-brand-500 via-brand-600 to-mint-600 px-5 py-5 text-white">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
                             <User size={24} />
@@ -314,7 +314,7 @@ export function Nav() {
             className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden"
           >
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-brand-600 to-brand-700 px-8 py-6 text-white relative">
+            <div className="bg-gradient-to-r from-brand-500 via-brand-600 to-mint-600 px-8 py-6 text-white relative">
               <button
                 onClick={() => setShowEditModal(false)}
                 className="absolute top-4 right-4 p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
