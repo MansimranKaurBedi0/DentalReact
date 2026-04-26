@@ -92,3 +92,74 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Update user profile
+exports.updateProfile = async (req, res) => {
+  try {
+    const { currentPassword, name, email, newPassword } = req.body;
+    const userId = req.params.id;
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // Verify current password
+    if (!currentPassword) {
+      return res.status(400).json({ error: "Current password is required to make changes." });
+    }
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Current password is incorrect." });
+    }
+
+    // Update name
+    if (name && name.trim()) {
+      user.name = name.trim();
+    }
+
+    // Update email (check for duplicates)
+    if (email && email.trim() && email !== user.email) {
+      const emailExists = await User.findOne({ email: email.trim().toLowerCase() });
+      if (emailExists) {
+        return res.status(400).json({ error: "This email is already in use by another account." });
+      }
+      user.email = email.trim().toLowerCase();
+    }
+
+    // Update password
+    if (newPassword) {
+      if (newPassword.length < 6) {
+        return res.status(400).json({ error: "New password must be at least 6 characters." });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await user.save();
+
+    // Generate fresh token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || 'fallback_secret',
+      { expiresIn: "1d" }
+    );
+
+    res.json({
+      message: "Profile updated successfully",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+
+  } catch (err) {
+    console.error("Update Profile Error: ", err);
+    res.status(500).json({ error: err.message });
+  }
+};

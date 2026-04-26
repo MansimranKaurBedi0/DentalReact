@@ -12,4 +12,9 @@ router.post('/register', authController.register);
 // @access  Public
 router.post('/login', authController.login);
 
+// @route   PUT /api/auth/update-profile/:id
+// @desc    Update user profile (name, email, password)
+// @access  Private
+router.put('/update-profile/:id', authController.updateProfile);
+
 module.exports = router;
