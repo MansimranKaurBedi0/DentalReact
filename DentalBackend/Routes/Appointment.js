@@ -205,4 +205,56 @@ router.get("/my-appointments/:email", async (req, res) => {
   }
 });
 
+// Patient: Cancel (delete) a pending appointment
+router.delete("/cancel/:id", async (req, res) => {
+  try {
+    const appointment = await Appointment.findById(req.params.id);
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    if (appointment.status !== "pending") {
+      return res.status(400).json({ message: "Only pending appointments can be cancelled" });
+    }
+
+    appointment.isDeleted = true;
+    await appointment.save();
+
+    res.json({ message: "Appointment cancelled successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error cancelling appointment" });
+  }
+});
+
+// Patient: Reschedule (update date/time) a pending appointment
+router.put("/reschedule/:id", async (req, res) => {
+  try {
+    const { date, time } = req.body;
+    const appointment = await Appointment.findById(req.params.id);
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    if (appointment.status !== "pending") {
+      return res.status(400).json({ message: "Only pending appointments can be rescheduled" });
+    }
+
+    if (!date || !time) {
+      return res.status(400).json({ message: "Date and time are required" });
+    }
+
+    appointment.date = date;
+    appointment.time = time;
+    await appointment.save();
+
+    res.json({ message: "Appointment rescheduled successfully", appointment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error rescheduling appointment" });
+  }
+});
+
 module.exports = router;

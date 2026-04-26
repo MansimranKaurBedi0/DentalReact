@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle2, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function Appointment() {
+  const { user } = useContext(AuthContext);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     phone: "",
     date: "",
     time: "",
@@ -24,6 +27,9 @@ export function Appointment() {
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps));
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
 
+  // Get today's date as YYYY-MM-DD for min date picker
+  const today = new Date().toISOString().split("T")[0];
+
   async function handleSubmit(e) {
     e.preventDefault();
     setIsSubmitting(true);
@@ -39,7 +45,7 @@ export function Appointment() {
       
       if (response.ok) {
         setIsSuccess(true);
-        setFormData({ name: "", email: "", phone: "", date: "", time: "", message: "" });
+        setFormData({ name: user?.name || "", email: user?.email || "", phone: "", date: "", time: "", message: "" });
         setStep(1);
       } else {
         alert("Failed to book appointment: " + (parsed.errors?.[0]?.msg || "Something went wrong"));
@@ -64,12 +70,22 @@ export function Appointment() {
           </div>
           <h2 className="text-3xl font-bold text-slate-900 mb-4">Appointment Booked!</h2>
           <p className="text-slate-600 mb-8">Your appointment has been successfully scheduled. We've sent a confirmation to your email.</p>
-          <button 
-            onClick={() => setIsSuccess(false)}
-            className="btn-primary w-full py-4"
-          >
-            Book Another Appointment
-          </button>
+          <div className="space-y-3">
+            <button 
+              onClick={() => setIsSuccess(false)}
+              className="btn-primary w-full py-4"
+            >
+              Book Another Appointment
+            </button>
+            {user && (
+              <Link 
+                to="/dashboard"
+                className="btn-secondary w-full py-4 inline-flex items-center justify-center"
+              >
+                Go to Dashboard
+              </Link>
+            )}
+          </div>
         </motion.div>
       </div>
     );
@@ -130,8 +146,20 @@ export function Appointment() {
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">Email Address</label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input type="email" name="email" required className="input-field pl-10 bg-slate-50 border-slate-200" placeholder="john@example.com" onChange={handleChange} value={formData.email} />
+                        <input 
+                          type="email" 
+                          name="email" 
+                          required 
+                          className={`input-field pl-10 bg-slate-50 border-slate-200 ${user ? 'opacity-60 cursor-not-allowed' : ''}`} 
+                          placeholder="john@example.com" 
+                          onChange={handleChange} 
+                          value={formData.email}
+                          readOnly={!!user}
+                        />
                       </div>
+                      {user && (
+                        <p className="text-xs text-slate-400 mt-1">Using your account email to link this appointment</p>
+                      )}
                     </div>
                     <div className="relative">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">Phone Number</label>
@@ -159,7 +187,7 @@ export function Appointment() {
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 block">Preferred Date</label>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input type="date" name="date" required className="input-field pl-10 bg-slate-50 border-slate-200" onChange={handleChange} value={formData.date} />
+                        <input type="date" name="date" required min={today} className="input-field pl-10 bg-slate-50 border-slate-200" onChange={handleChange} value={formData.date} />
                       </div>
                     </div>
                     <div>

@@ -2,23 +2,23 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    // Check if user is logged in
+// Synchronously read from localStorage to avoid flash of logged-out state
+const getInitialUser = () => {
+  try {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-    
     if (storedUser && token) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-      }
+      return JSON.parse(storedUser);
     }
-  }, []);
+  } catch (e) {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+  }
+  return null;
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(getInitialUser);
 
   const login = (userData, token) => {
     setUser(userData);
