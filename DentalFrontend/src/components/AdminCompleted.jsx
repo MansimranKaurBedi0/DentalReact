@@ -3,6 +3,7 @@ import { AdminCards } from "./AdminCards";
 import { motion } from "framer-motion";
 import { Calendar, ChevronLeft, ChevronRight, CheckCircle2, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_URL } from '../config.js';
 
 export function AdminCompleted() {
   const [appointments, setAppointments] = useState([]);
@@ -13,7 +14,7 @@ export function AdminCompleted() {
   async function fetchCompleted(currentPage = 1) {
     const limit = 8;
     try {
-      const res = await fetch(`http://localhost:3000/user/view-completed?page=${currentPage}&limit=${limit}`, {
+      const res = await fetch(`${API_URL}/user/view-completed?page=${currentPage}&limit=${limit}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

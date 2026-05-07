@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-const url="mongodb://localhost:27017/dental";
+const url = process.env.MONGO_URI || "mongodb://localhost:27017/dental";
 const connectMongoose=async ()=>{
   try{
     await mongoose.connect(url);

@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, User, Mail, Phone, MessageSquare, CheckCircle2, ArrowRight, ArrowLeft, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_URL } from '../config.js';
 
 export function Appointment() {
   const { user } = useContext(AuthContext);
@@ -35,7 +36,7 @@ export function Appointment() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("http://localhost:3000/user/appointment", {
+      const response = await fetch(`${API_URL}/user/appointment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

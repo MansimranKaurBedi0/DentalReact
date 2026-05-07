@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, CheckCircle2, XCircle, AlertCircle, Plus, Trash2, Pencil, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_URL } from '../config.js';
 
 export function Dashboard() {
   const { user } = useContext(AuthContext);
@@ -30,7 +31,7 @@ export function Dashboard() {
 
   const fetchAppointments = () => {
     if (user?.email) {
-      fetch(`http://localhost:3000/user/my-appointments/${user.email}`)
+      fetch(`${API_URL}/user/my-appointments/${user.email}`)
         .then(res => res.json())
         .then(data => {
           setAppointments(data);
@@ -54,7 +55,7 @@ export function Dashboard() {
   const handleCancel = async (id) => {
     setCancelLoading(true);
     try {
-      const res = await fetch(`http://localhost:3000/user/cancel/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API_URL}/user/cancel/${id}`, { method: "DELETE" });
       const data = await res.json();
       if (res.ok) {
         setAppointments(prev => prev.filter(a => a._id !== id));
@@ -88,7 +89,7 @@ export function Dashboard() {
     setRescheduleLoading(true);
     setRescheduleError("");
     try {
-      const res = await fetch(`http://localhost:3000/user/reschedule/${showReschedule._id}`, {
+      const res = await fetch(`${API_URL}/user/reschedule/${showReschedule._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ date: rescheduleDate, time: rescheduleTime })

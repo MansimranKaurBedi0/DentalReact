@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from "framer-motion";
 import { User, Mail, Lock, ArrowRight, Loader2, Stethoscope, CheckCircle2 } from 'lucide-react';
+import { API_URL } from '../config.js';
 
 export function Signup() {
   const [name, setName] = useState('');
@@ -19,7 +20,7 @@ export function Signup() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
@@ -28,7 +29,7 @@ export function Signup() {
       const data = await response.json();
 
       if (response.ok) {
-        const loginResponse = await fetch('http://localhost:3000/api/auth/login', {
+        const loginResponse = await fetch(`${API_URL}/api/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })

@@ -3,6 +3,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut, User, Calendar, ShieldCheck, Stethoscope, Mail, Lock, Pencil, Settings, Eye, EyeOff, CheckCircle2, XCircle } from "lucide-react";
+import { API_URL } from '../config.js';
 
 export function Nav() {
   const { user, logout, updateUser } = useContext(AuthContext);
@@ -61,7 +62,7 @@ export function Nav() {
 
     try {
       const userId = user?.id || user?._id;
-      const res = await fetch(`http://localhost:3000/api/auth/update-profile/${userId}`, {
+      const res = await fetch(`${API_URL}/api/auth/update-profile/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AdminCards } from "./AdminCards";
 import { motion } from "framer-motion";
 import { Users, Calendar, ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
+import { API_URL } from '../config.js';
 
 export function Admin() {
   const [appointment, setAppointment] = useState([]);
@@ -12,7 +13,7 @@ export function Admin() {
   async function handleData(currentPage = 1) {
     const limit = 8;
     try {
-      const res = await fetch(`http://localhost:3000/user/view?page=${currentPage}&limit=${limit}`, {
+      const res = await fetch(`${API_URL}/user/view?page=${currentPage}&limit=${limit}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });

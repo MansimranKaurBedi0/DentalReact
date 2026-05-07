@@ -1,9 +1,10 @@
 import { Mail, Phone, Calendar, Clock, Trash2, CheckCircle, XCircle, MessageSquare, CircleCheckBig } from "lucide-react";
+import { API_URL } from '../config.js';
 
 export function AdminCards({ _id, name, email, phone, date, time, message, status, onRefresh, showDeleteOnly }) {
   
   async function updateStatus(action) {
-    const res = await fetch(`http://localhost:3000/user/${action}/${_id}`, {
+    const res = await fetch(`${API_URL}/user/${action}/${_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
     });
@@ -14,7 +15,7 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
-      const res = await fetch(`http://localhost:3000/user/soft-delete/${_id}`, {
+      const res = await fetch(`${API_URL}/user/soft-delete/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
       });
@@ -24,7 +25,7 @@ export function AdminCards({ _id, name, email, phone, date, time, message, statu
 
   const handleComplete = async () => {
     if (window.confirm("Mark this appointment as completed?")) {
-      const res = await fetch(`http://localhost:3000/user/complete/${_id}`, {
+      const res = await fetch(`${API_URL}/user/complete/${_id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
       });
